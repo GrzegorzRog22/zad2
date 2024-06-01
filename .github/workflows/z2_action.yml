@@ -72,19 +72,19 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
+          password: ${{ secrets.GH_TOKEN }}
       
       -
         name: Github metadata definitions
-        id: meta_gh
+        id: gh_metadata
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ vars.GHCR_USERNAME }}/zad2
+          images: ghcr.io/${{ vars.GH_USERNAME }}/zad2
           flavor: latest=false
           tags: ${{ steps.meta.outputs.tags }}
 
       -
-        name: Build and push image to GHCR
+        name: Build&push image to GitHub
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -93,5 +93,5 @@ jobs:
           push: true
           cache-from: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache  
-          tags: ${{ steps.meta_gh.outputs.tags }}
+          tags: ${{ steps.gh_metadata.outputs.tags }} 
       
